@@ -7,4 +7,4 @@ sudo cat /home/dvswitch/.bashrc bashrc.add > bash_new
 sudo rm bashrc.add
 sudo mv bash_new /home/dvswitch/.bashrc
 
-sudo nano ~/.bashrc
+sudo nano /home/dvswitch/.bashrc
