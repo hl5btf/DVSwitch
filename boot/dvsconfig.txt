@@ -1,0 +1,9 @@
+callsign=HL1AAA
+dmrid=1234567
+ext=11
+rptid=123456711
+port=50000
+latitude=36.0000
+longitude=128.0000
+location="Seoul, Korea"
+chg=0
