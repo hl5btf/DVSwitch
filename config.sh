@@ -4,6 +4,8 @@
 echo "-----------------------비밀번호 변경"
 passwd
 
+sudo mkdir /home/dvswitch/temp
+
 # - WIFI 설정
 echo "--------------------------WIFI 설정"
 sudo wget -O /etc/wpa_supplicant/wpa_supplicant.conf https://raw.githubusercontent.com/hl5btf/DVSwitch/main/wpa_supplicant.conf
@@ -17,9 +19,9 @@ sudo cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 ### /etc/dhcpcd.conf 내용변경
 echo "-----------------------DHCPCD.CONF 변경"
-sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dhcpcd.add
-sudo cat /etc/dhcpcd.conf dhcpcd.add > dhcpcd.conf
-sudo rm dhcpcd.add
+sudo wget -O /home/dvswitch/temp/dhcpcd.add https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dhcpcd.add
+sudo cat /etc/dhcpcd.conf /home/dvswitch/temp/dhcpcd.add > dhcpcd.conf
+sudo rm /home/dvswitch/temp/dhcpcd.add
 sudo mv dhcpcd.conf /etc/dhcpcd.conf
 
 # dhcpcd.conf 심볼릭 링크
@@ -36,10 +38,10 @@ sudo ln -sb /boot/wpa_supplicant.txt /etc/wpa_supplicant/wpa_supplicant.conf
 
 ### ~/.bashrc에 Alias 추가
 echo "---------------------ALIAS 추가"
-sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/bashrc.txt
-sudo cat /home/dvswitch/.bashrc bashrc.add > bash
-sudo rm bashrc.add
-sudo mv bash /home/dvswitch/.bashrc
+sudo wget -O /home/dvswitch/temp/bashrc.add https://raw.githubusercontent.com/hl5btf/DVSwitch/main/bashrc.add
+sudo cat /home/dvswitch/.bashrc /home/dvswitch/temp/bashrc.add > bash_new
+sudo rm /home/dvswitch/temp/bashrc.add
+sudo mv bash_new /home/dvswitch/.bashrc
 
 ### PATH 추가
 echo "---------------------PATH 추가"
@@ -74,8 +76,7 @@ sudo sed -i'' -r -e "/exit 0/i\\$var" $file
 
 ### temp.sh 한국용으로 변경 (CPU사용율 표시)
 echo "---------------------temp.sh 설치"
-sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/temp.sh
-sudo mv temp.sh /usr/local/dvs/temp.sh
+sudo wget -O /usr/local/dvs/temp.sh https://raw.githubusercontent.com/hl5btf/DVSwitch/main/temp.sh
 sudo chmod +x /usr/local/dvs/temp.sh
 
 ### RX_freq, TX_freq 000000000 으로 변경
@@ -89,5 +90,8 @@ echo "---------------------boot 폴더에 파일 설치"
 sudo wget -O /boot/dvsNetwork.exe https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsNetwork.exe
 sudo wget -O /boot/dvsSetup.exe https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsSetup.exe
 sudo wget -O /boot/dvsconfig.txt https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsconfig.txt
+
+sudo rm /home/dvswitch/temp/*
+sudo rmdir /home/dvswitch/temp
 
 sudo rm config.sh
