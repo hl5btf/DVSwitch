@@ -86,3 +86,5 @@ echo "---------------------boot 폴더에 파일 설치"
 sudo wget -O /boot/dvsNetwork.exe https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsNetwork.exe
 sudo wget -O /boot/dvsSetup.exe https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsSetup.exe
 sudo wget -O /boot/dvsconfig.txt https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsconfig.txt
+
+sudo rm config.sh
