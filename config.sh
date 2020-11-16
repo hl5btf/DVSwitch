@@ -36,7 +36,7 @@ sudo ln -sb /boot/wpa_supplicant.txt /etc/wpa_supplicant/wpa_supplicant.conf
 
 ### ~/.bashrc에 Alias 추가
 echo "---------------------ALIAS 추가"
-sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/bashrc.add
+sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/bashrc.txt
 sudo cat /home/dvswitch/.bashrc bashrc.add > bash
 sudo rm bashrc.add
 sudo mv bash /home/dvswitch/.bashrc
