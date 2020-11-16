@@ -7,6 +7,9 @@ passwd
 # - WIFI 설정
 echo "--------------------------WIFI 설정"
 sudo wget -O /etc/wpa_supplicant/wpa_supplicant.conf https://raw.githubusercontent.com/hl5btf/DVSwitch/main/wpa_supplicant.conf
+rfkill block all
+rfkill unblock all
+sudo ifconfig wlan0 up
 
 # - TimeZone 설정
 echo "---------------------TIME ZONE 설정"
