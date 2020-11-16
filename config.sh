@@ -34,9 +34,9 @@ sudo ln -sb /boot/wpa_supplicant.txt /etc/wpa_supplicant/wpa_supplicant.conf
  ### ~/.bashrc에 Alias 추가
 echo "---------------------ALIAS 추가"
 sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/bashrc.add
-sudo cat ~/.bashrc bashrc.add > bashrc
+sudo cat /home/dvswitch/.bashrc bashrc.add > bashrc
 sudo rm bashrc.add
-sudo mv bashrc ~/.bashrc
+sudo mv bashrc /home/dvswitch/.bashrc
 
 ### PATH 추가
 echo "---------------------PATH 추가"
