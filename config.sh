@@ -27,7 +27,7 @@ echo "-----------------------dhcpcd.conf 심볼릭 링크 설정"
 sudo cp /etc/dhcpcd.conf /boot/dhcpcd.txt
 sudo mv /etc/dhcpcd.conf /etc/dhcpcd.bak
 sudo ln -s /boot/dhcpcd.txt /etc/dhcpcd.conf
-	
+
 # wpa_supplicant 심볼릭링크
 echo "-----------------------wpa_supplicant.conf 심볼릭 링크 설정"
 sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /boot/wpa_supplicant.txt
