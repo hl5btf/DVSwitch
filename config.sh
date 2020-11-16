@@ -33,8 +33,8 @@ echo "-----------------------wpa_supplicant.conf 심볼릭 링크 설정"
 sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /boot/wpa_supplicant.txt
 sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bak
 sudo ln -sb /boot/wpa_supplicant.txt /etc/wpa_supplicant/wpa_supplicant.conf
- 
- ### ~/.bashrc에 Alias 추가
+
+### ~/.bashrc에 Alias 추가
 echo "---------------------ALIAS 추가"
 sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/bashrc.add
 sudo cat /home/dvswitch/.bashrc bashrc.add > bash
