@@ -31,16 +31,24 @@ if [[ -z `sudo grep $text $file` ]]; then
 fi
 
 # dhcpcd.conf 심볼릭 링크
-echo "-----------------------dhcpcd.conf 심볼릭 링크 설정"
-sudo cp /etc/dhcpcd.conf /boot/dhcpcd.txt
-sudo mv /etc/dhcpcd.conf /etc/dhcpcd.bak
-sudo ln -s /boot/dhcpcd.txt /etc/dhcpcd.conf
+file=/boot/dhcpcd.txt
+
+if [ ! -e $file ]; then
+  echo "-----------------------dhcpcd.conf 심볼릭 링크 설정"
+  sudo cp /etc/dhcpcd.conf /boot/dhcpcd.txt
+  sudo mv /etc/dhcpcd.conf /etc/dhcpcd.bak
+  sudo ln -s /boot/dhcpcd.txt /etc/dhcpcd.conf
+fi
 
 # wpa_supplicant 심볼릭링크
-echo "-----------------------wpa_supplicant.conf 심볼릭 링크 설정"
-sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /boot/wpa_supplicant.txt
-sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bak
-sudo ln -sb /boot/wpa_supplicant.txt /etc/wpa_supplicant/wpa_supplicant.conf
+file=/boot/wpa_supplicant.txt
+
+if [ ! -e $file ]; then
+  echo "-----------------------wpa_supplicant.conf 심볼릭 링크 설정"
+  sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /boot/wpa_supplicant.txt
+  sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bak
+  sudo ln -sb /boot/wpa_supplicant.txt /etc/wpa_supplicant/wpa_supplicant.conf
+fi
 
 ### PATH 추가
 echo "---------------------PATH 추가"
