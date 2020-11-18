@@ -6,8 +6,10 @@ passwd
 
 
 # - WIFI 설정
+file=/etc/wpa_supplicant/wpa_supplicant.conf
+
 echo "--------------------------WIFI 설정"
-sudo wget -O /etc/wpa_supplicant/wpa_supplicant.conf https://raw.githubusercontent.com/hl5btf/DVSwitch/main/wpa_supplicant.conf
+sudo wget -O $file https://raw.githubusercontent.com/hl5btf/DVSwitch/main/wpa_supplicant.conf
 rfkill block all
 rfkill unblock all
 sudo ifconfig wlan0 up
@@ -17,11 +19,16 @@ echo "---------------------TIME ZONE 설정"
 sudo cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 ### /etc/dhcpcd.conf 내용변경
-echo "-----------------------DHCPCD.CONF 변경"
-sudo wget dhcpcd.add https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dhcpcd.add
-sudo cat /etc/dhcpcd.conf dhcpcd.add > dhcpcd.conf
-sudo rm dhcpcd.add
-sudo mv dhcpcd.conf /etc/dhcpcd.conf
+file=/etc/dhcpcd.conf
+text=192.168.0.160
+
+if [[ -z `sudo grep $text $file` ]]; then
+  echo "-----------------------DHCPCD.CONF 변경"
+  sudo wget dhcpcd.add https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dhcpcd.add
+  sudo cat $file dhcpcd.add > dhcpcd.conf
+  sudo rm dhcpcd.add
+  sudo mv dhcpcd.conf $file
+fi
 
 # dhcpcd.conf 심볼릭 링크
 echo "-----------------------dhcpcd.conf 심볼릭 링크 설정"
