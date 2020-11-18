@@ -96,22 +96,43 @@ if [[ -z `sudo grep $text $file` ]]; then
 fi
 
 ### temp.sh 한국용으로 변경 (CPU사용율 표시)
-echo "---------------------temp.sh 설치"
-sudo wget -O /usr/local/dvs/temp.sh https://raw.githubusercontent.com/hl5btf/DVSwitch/main/temp.sh
-sudo chmod +x /usr/local/dvs/temp.sh
+file=/usr/local/dvs/temp.sh
+text=cpu_usage
+
+if [[ -z `sudo grep $text $file` ]]; then
+  echo "---------------------temp.sh 설치"
+  sudo wget -O $file https://raw.githubusercontent.com/hl5btf/DVSwitch/main/temp.sh
+  sudo chmod +x $file
+fi
 
 ### RX_freq, TX_freq 000000000 으로 변경
-echo "---------------------FREQ 변경 000000000"
 file=/var/lib/dvswitch/dvs/var.txt
-sudo sed -i -e "/^rx_freq=/ c rx_freq=000000000" $file
-sudo sed -i -e "/^tx_freq=/ c rx_freq=000000000" $file
+text=000000000
+
+if [[ -z `sudo grep $text $file` ]]; then
+  echo "---------------------FREQ 변경 000000000"
+  sudo sed -i -e "/^rx_freq=/ c rx_freq=000000000" $file
+  sudo sed -i -e "/^tx_freq=/ c rx_freq=000000000" $file
+fi
 
 ### boot 폴더에 파일 설치
 echo "---------------------boot 폴더에 파일 설치"
-sudo wget -O /boot/dvsNetwork.exe https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsNetwork.exe
-sudo wget -O /boot/dvsSetup.exe https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsSetup.exe
-sudo wget -O /boot/dvsconfig.txt https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsconfig.txt
+file=/boot/dvsNetwork.exe
+if [ ! -e $file ]; then
+  sudo wget -O $file https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsNetwork.exe
+fi
 
+file=/boot/dvsSetup.exe
+if [ ! -e $file ]; then
+  sudo wget -O $file https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsSetup.exe
+fi
+
+file=/boot/dvsconfig.txt
+if [ ! -e $file ]; then
+  sudo wget -O $file https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsconfig.txt
+fi
+
+### 2nd config routine
 sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/config_2nd.sh
 sudo chmod +x config_2nd.sh
 sudo ./config_2nd.sh
