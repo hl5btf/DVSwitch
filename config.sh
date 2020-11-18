@@ -51,35 +51,49 @@ if [ ! -e $file ]; then
 fi
 
 ### PATH 추가
-echo "---------------------PATH 추가"
 file=/etc/profile
-path=$(echo $PATH)
-var=${path}:/opt/MMDVM_Bridge
-sudo sed -i "/\/usr\/local\/games/ c PATH=\"$var\"" $file
+text=MMDVM_Bridge
+
+if [[ -z `sudo grep $text $file` ]]; then
+  echo "---------------------PATH 추가"
+  path=$(echo $PATH)
+  var=${path}:/opt/MMDVM_Bridge
+  sudo sed -i "/\/usr\/local\/games/ c PATH=\"$var\"" $file
+fi
 
 ### Shellinabox 설치
-echo "---------------------ShellInaBox 설치 및 설정"
-sudo apt-get update
-sudo apt-get install shellinabox
-
-# Shellinabox 설정
 file=/etc/default/shellinabox
-var=SHELLINABOX_PORT=7388
-sudo sed -i "/PORT=/ c $var" $file
-var="SHELLINABOX_ARGS=\"--no-beep --disable-ssl \""
-sudo sed -i "/ARGS=/ c $var" $file
-var=OPTS=\"--localhost-only\"
-echo "$var" | sudo tee -a $file
+
+if [ ! -e $file ]; then
+  echo "---------------------ShellInaBox 설치 및 설정"
+  sudo apt-get update
+  sudo apt-get install shellinabox
+  # Shellinabox 설정
+  var=SHELLINABOX_PORT=7388
+  sudo sed -i "/PORT=/ c $var" $file
+  var="SHELLINABOX_ARGS=\"--no-beep --disable-ssl \""
+  sudo sed -i "/ARGS=/ c $var" $file
+  var=OPTS=\"--localhost-only\"
+  echo "$var" | sudo tee -a $file
+fi
 
 ### dvsstart.sh 파일 설치
-echo "---------------------dvsstart.sh 설치"
-sudo wget -O /etc/dvsstart.sh https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsstart.sh
-sudo chmod +x /etc/dvsstart.sh
+file=/etc/dvsstart.sh
+
+if [ ! -e $file ]; then
+  echo "---------------------dvsstart.sh 설치"
+  sudo wget -O $file https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsstart.sh
+  sudo chmod +x $file
+fi
 
 ### /etc/rc.local 에 dvsstart.sh 실행 내용 추가
 file=/etc/rc.local
-var="sudo /etc/dvsstart.sh &"
-sudo sed -i'' -r -e "/exit 0/i\\$var" $file
+text=dvsstart.sh
+
+if [[ -z `sudo grep $text $file` ]]; then
+  var="sudo /etc/dvsstart.sh &"
+  sudo sed -i'' -r -e "/exit 0/i\\$var" $file
+fi
 
 ### temp.sh 한국용으로 변경 (CPU사용율 표시)
 echo "---------------------temp.sh 설치"
