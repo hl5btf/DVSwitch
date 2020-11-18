@@ -43,7 +43,7 @@ var=${path}:/opt/MMDVM_Bridge
 sudo sed -i "/\/usr\/local\/games/ c PATH=\"$var\"" $file
 
 ### Shellinabox 설치
-echo "---------------------ShellInBox 설치 및 설정"
+echo "---------------------ShellInaBox 설치 및 설정"
 sudo apt-get update
 sudo apt-get install shellinabox
 
