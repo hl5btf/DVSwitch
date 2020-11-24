@@ -31,7 +31,7 @@ update_var usrp_port ${port}
 
 # update_var bm_master South_Korea_4501
 update_var bm_address bm.dv.or.kr
-update_var bm_password passw0rd
+update_var bm_password ${bm_pswd}
 update_var bm_port 62031
 
 update_var dmrplus_address ipsc.dvham.com
