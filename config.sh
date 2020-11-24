@@ -1,5 +1,24 @@
 #!/bin/bash
 
+#----설정후 확인 사항---------------------------------------------------
+# putty로 연결하여 비밀번호 확인
+# date   (시간 확인)
+# sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+# sudo nano /etc/dhcpcd.conf
+# sudo nano /boot/wpa_supplicant.txt
+# sudo nano /boot/dhcpcd.txt
+# sudo nano /etc/profile  (PATH 확인)
+# sudo nano /etc/default/shellinabox
+# sudo nano /etc/dvsstart.sh
+# sudo nano /etc/rc.local
+# sudo nano /usr/local/dvs/temp.sh   (cpu_usage 확인)
+# sudo nano /home/dvswitch/.bashrc  (alias 확인)
+# sudo nano /var/lib/dvswitch/dvs/var.txt  (주파수 000000000)
+# cd /boot
+# (파일 확인 dvsconfig.txt,  dvsSetup.txt,   dvsNetwork.exe)
+#----설정후 확인 사항---------------------------------------------------
+
+
 # - 비밀번호 변경
 #passwd
 echo
