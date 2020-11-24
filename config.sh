@@ -1,9 +1,23 @@
 #!/bin/bash
 
 # - 비밀번호 변경
+#passwd
+echo
 echo "-----------------------비밀번호 변경"
-passwd
+echo "RASPI-CONFIG를 실행합니다"
+echo "ENTER를 누르시오"
+echo
+read x
+sudo rapi-config
 
+echo
+echo "ENTER를 누르면 update/upgrade부터 진행합니다."
+echo
+read x
+
+# update / upgrade
+sudo apt-get update
+sudo apt-get upgrade
 
 # - WIFI 설정
 file=/etc/wpa_supplicant/wpa_supplicant.conf
