@@ -139,7 +139,9 @@ if [[ -z `sudo grep $text $file` ]]; then
 fi
 
 ### chk_temp 심볼릭 링크
-sudo ln -s /var/lib/dvswitch/dvs/chk_temp /etc/cron.d/chk_temp
+if [ ! -e /etc/cron.d/chk_temp ]; then
+  sudo ln -s /var/lib/dvswitch/dvs/chk_temp /etc/cron.d/chk_temp
+fi
 
 ### RX_freq, TX_freq 000000000 으로 변경
 file=/var/lib/dvswitch/dvs/var.txt
