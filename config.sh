@@ -28,7 +28,7 @@ echo "RASPI-CONFIG를 실행합니다"
 echo "ENTER를 누르시오"
 echo
 read x
-sudo rapi-config
+sudo raspi-config
 
 echo
 echo "ENTER를 누르면 update/upgrade부터 진행합니다."
