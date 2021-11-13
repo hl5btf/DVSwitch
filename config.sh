@@ -144,14 +144,14 @@ if [ ! -e /etc/cron.d/chk_temp ]; then
   sudo ln -s /var/lib/dvswitch/dvs/chk_temp /etc/cron.d/chk_temp
 fi
 
-### RX_freq, TX_freq 000000000 으로 변경
+### RX_freq, TX_freq 430000000 으로 변경
 file=/var/lib/dvswitch/dvs/var.txt
-text=000000000
+text=430000000
 
 if [[ -z `sudo grep $text $file` ]]; then
-  echo "---------------------FREQ 변경 000000000"
-  sudo sed -i -e "/^rx_freq=/ c rx_freq=000000000" $file
-  sudo sed -i -e "/^tx_freq=/ c rx_freq=000000000" $file
+  echo "---------------------FREQ 변경 430000000"
+  sudo sed -i -e "/^rx_freq=/ c rx_freq=430000000" $file
+  sudo sed -i -e "/^tx_freq=/ c rx_freq=430000000" $file
 fi
 
 ### boot 폴더에 파일 설치
