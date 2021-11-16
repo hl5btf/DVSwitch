@@ -7,4 +7,4 @@ bm_pswd=passw0rd
 latitude=36.0000
 longitude=128.0000
 location="Seoul, Korea"
-chg=0
+chg=1
