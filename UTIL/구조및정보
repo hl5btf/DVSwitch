@@ -1,1 +1,7 @@
 
+
+
+data : /var/lib/dvswitch/dvs
+adv : /var/lib/dvswitch/dvs/adv (sub folders : EN, KR...)
+lan : /var/lib/dvswitch/dvs/lan
+tgdb : /var/lib/dvswitch/dvs/tgdb (sub folder : EN, KR...)
