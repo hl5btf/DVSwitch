@@ -30,7 +30,7 @@ update_var module S
 update_var usrp_port ${port}
 
 # update_var bm_master South_Korea_4501
-update_var bm_address bm.dv.or.kr
+update_var bm_address 4501.master.brandmeister.network
 update_var bm_password ${bm_pswd}
 update_var bm_port 62031
 
