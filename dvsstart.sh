@@ -16,8 +16,8 @@ sudo cp -f /var/lib/dvswitch/dvs/lan/korean.txt /var/lib/dvswitch/dvs/lan/langua
 source /var/lib/dvswitch/dvs/var.txt
 source /boot/dvsconfig.txt
 
-update_var rx_freq 000000000
-update_var tx_freq 000000000
+update_var rx_freq 430000000
+update_var tx_freq 430000000
 update_var call_sign ${callsign}
 update_var dmr_id ${dmrid}
 update_var rpt_id ${rptid}
