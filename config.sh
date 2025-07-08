@@ -25,13 +25,17 @@
 echo
 echo "-----------------------비밀번호 변경"
 echo "RASPI-CONFIG를 실행합니다"
+echo "ESC 를 누르면 비밀번호 설정이 중단됨"
 echo "ENTER를 누르시오"
 echo
 read x
 sudo raspi-config
 
 echo
-echo "ENTER를 누르면 update/upgrade부터 진행합니다."
+echo "update/upgrade 실행"
+echo "시간이 오래(10분 이상) 걸리고, 중간에 멈춘 것처럼 보일 수도 있음."
+echo "시작 후에 (Y/n) 질문에는 Y를 눌러주세요."
+echo "ENTER를 누르면 update/upgrade를 진행합니다."
 echo
 read x
 
