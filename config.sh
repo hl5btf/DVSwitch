@@ -44,13 +44,15 @@ sudo apt-get update
 sudo apt-get upgrade
 
 # - WIFI 설정
-file=/etc/wpa_supplicant/wpa_supplicant.conf
-
 echo "--------------------------WIFI 설정"
+file=/etc/wpa_supplicant/wpa_supplicant.conf
+# 파일이 없으면 덮어쓰기
+if [ ! -f "$file" ]; then
 sudo wget -O $file https://raw.githubusercontent.com/hl5btf/DVSwitch/main/wpa_supplicant.conf
 rfkill block all
 rfkill unblock all
 sudo ifconfig wlan0 up
+fi
 
 # - TimeZone 설정
 echo "---------------------TIME ZONE 설정"
@@ -101,7 +103,7 @@ fi
 
 ### Shellinabox 설치
 file=/etc/default/shellinabox
-
+# 파일이 없으면 실행
 if [ ! -e $file ]; then
   echo "---------------------ShellInaBox 설치 및 설정"
   sudo apt-get update
