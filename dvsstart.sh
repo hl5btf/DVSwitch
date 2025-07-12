@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo
+echo
+echo "----------------------------------------------------"
+echo
+echo "------------초기 설정을 시작합니다 ------------------"
+
 file=dvsstart_setup.sh
 
 sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/$file > /dev/null 2>&1
