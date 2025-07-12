@@ -1,6 +1,7 @@
 #!/bin/bash
 
-file=dvsstart_setup.sh
+#file=dvsstart_setup.sh
+file=test.sh
 
 sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/$file
 
