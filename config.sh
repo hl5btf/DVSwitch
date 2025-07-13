@@ -12,7 +12,7 @@
 # sudo nano /etc/dvsstart.sh
 # sudo nano /etc/rc.local
 # sudo nano /usr/local/dvs/temp.sh   (cpu_usage 확인)
-# sudo nano /home/dvswitch/.bashrc  (alias 확인)
+# sudo nano /etc/bash.bashrc  (alias 확인)
 # sudo nano /var/lib/dvswitch/dvs/var.txt  (주파수 000000000)
 # sudo nano /etc/cron.d/chk_temp   (온도설정 심볼릭 링크)
 # cd /boot
