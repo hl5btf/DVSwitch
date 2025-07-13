@@ -1,16 +1,23 @@
 #!/bin/bash
 
-### ~/.bashrc에 Alias 추가
+BASHRC="/etc/bash.bashrc"
 
-file=/home/dvswitch/.bashrc
-text=Analog_Bridge
+# 추가할 alias 목록
+read -r -d '' ALIASES << 'EOF'
+alias dv="cd /usr/local/dvs"
+alias data="cd /var/lib/dvswitch/dvs"
+alias adv="cd /var/lib/dvswitch/dvs/adv"
+alias lan="cd /var/lib/dvswitch/dvs/lan"
+alias tgdb="cd /var/lib/dvswitch/dvs/tgdb"
+alias ab="cd /opt/Analog_Bridge"
+alias mb="cd /opt/MMDVM_Bridge"
+alias ar="cd /opt/Analog_Reflector"
+EOF
 
-if [[ -z `sudo grep $text $file` ]]; then
-  echo "---------------------ALIAS 추가"
-  sudo wget bashrc.add https://raw.githubusercontent.com/hl5btf/DVSwitch/main/bashrc.add
-  sudo cat $file bashrc.add > bash_new
-  sudo rm bashrc.add
-  sudo mv bash_new $file
-fi
+# 하나씩 확인하며, 기존에 없는 alias만 추가
 
-# sudo nano $file
+while read -r line; do
+    if ! grep -Fxq "$line" "$BASHRC"; then
+        echo "$line" | sudo tee -a "$BASHRC" > /dev/null
+    fi
+done <<< "$ALIASES"
