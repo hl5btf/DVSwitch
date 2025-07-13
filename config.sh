@@ -90,20 +90,48 @@ if [ ! -e $file ]; then
   sudo ln -sb /boot/wpa_supplicant.txt /etc/wpa_supplicant/wpa_supplicant.conf
 fi
 
-### PATH 추가
-file=/etc/profile
+### PATH 추가 ( 아래 내용 싱행후에 콘솔에서 source /etc/profile 를 실행해야 적용됨)
+file="/etc/profile"
 
-read -r -d '' profiles << 'EOF'
-export PATH=$PATH:/opt/MMDVM_Bridge
-export PATH=$PATH:/usr/local/dvs
+# 추가할 디렉토리 목록
+read -r -d '' new_dirs << 'EOF'
+/opt/MMDVM_Bridge
+/usr/local/dvs
 EOF
 
-# /etc/profile에 없는 PATH 항목만 추가
-while read -r line; do
-    if ! grep -Fq "$line" "$file"; then
-        echo "$line" | sudo tee -a "$file" > /dev/null
-    fi
-done <<< "$profiles"
+# 1. 기존 PATH 라인들 모두 추출
+existing_path_lines=$(grep -n '^export PATH=' "$file" | cut -d: -f1)
+
+# 2. 기존 경로 모으기
+existing_paths=""
+for line_no in $existing_path_lines; do
+    line=$(sed -n "${line_no}p" "$file")
+    # $PATH:$dir1:$dir2 형식에서 실제 경로만 추출
+    paths=$(echo "$line" | sed -E 's/^export PATH=\$PATH:?//; s/["]//g' | tr ':' '\n')
+    for path in $paths; do
+        existing_paths="$existing_paths"$'\n'"$path"
+    done
+done
+
+# 3. 새로 추가할 디렉토리와 기존 경로들을 하나로 정리
+all_paths="$existing_paths"
+for dir in $new_dirs; do
+    all_paths="$all_paths"$'\n'"$dir"
+done
+
+# 4. 중복 제거 + 다시 PATH 라인으로 조립
+unique_paths=$(echo "$all_paths" | grep -v '^$' | sort -u | tr '\n' ':' | sed 's/:$//')
+new_export_line="export PATH=\$PATH:$unique_paths"
+
+# 5. 기존 PATH 라인 모두 삭제
+if [ -n "$existing_path_lines" ]; then
+    sudo sed -i '/^export PATH=/d' "$file"
+fi
+
+# 6. 새 export PATH 줄 추가
+echo "$new_export_line" | sudo tee -a "$file" > /dev/null
+
+# 콘솔에서 source /etc/profile 를 실행해야 적용됨
 
 
 ### Shellinabox 설치
