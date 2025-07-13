@@ -22,5 +22,4 @@ while read -r line; do
     fi
 done <<< "$ALIASES"
 
-# 현재 셀에서 즉시 적용
-. /etc/bash.bashrc
+# 콘솔에서 source /etc/bash.bashrc 를 실행해야 적용됨
