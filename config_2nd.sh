@@ -21,3 +21,6 @@ while read -r line; do
         echo "$line" | sudo tee -a "$BASHRC" > /dev/null
     fi
 done <<< "$ALIASES"
+
+# 현재 셀에서 즉시 적용
+. /etc/bash.bashrc
