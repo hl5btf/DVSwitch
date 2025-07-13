@@ -177,10 +177,12 @@ if [ ! -e $file ]; then
   sudo wget -O $file https://github.com/hl5btf/DVSwitch/raw/main/boot/dvsconfig.txt
 fi
 
-### 2nd config routine
-sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/config_2nd.sh
-sudo chmod +x config_2nd.sh
-sudo ./config_2nd.sh
+### add_aliases.sh routine
+file=add_aliases.sh
+sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/$file
+sudo chmod +x $file
+sudo ./$file
 
-sudo rm config_2nd.sh
+sudo rm $file
+
 sudo rm config.sh
