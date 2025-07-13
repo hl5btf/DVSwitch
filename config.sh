@@ -92,13 +92,18 @@ fi
 
 ### PATH 추가
 file=/etc/profile
-text="/opt/MMDVM_Bridge"
 
-# 이미 /opt/MMDVM_Bridge가 포함되어 있지 않으면 추가
-if ! grep -q "$text" "$file"; then
-  echo "---------------------PATH 추가"
-  echo "export PATH=\$PATH:/opt/MMDVM_Bridge" | sudo tee -a "$file" > /dev/null
-fi
+read -r -d '' profiles << 'EOF'
+export PATH=$PATH:/opt/MMDVM_Bridge
+export PATH=$PATH:/usr/local/dvs
+EOF
+
+# /etc/profile에 없는 PATH 항목만 추가
+while read -r line; do
+    if ! grep -Fq "$line" "$file"; then
+        echo "$line" | sudo tee -a "$file" > /dev/null
+    fi
+done <<< "$profiles"
 
 
 ### Shellinabox 설치
