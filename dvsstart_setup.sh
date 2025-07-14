@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 스크립트
+
 source /var/lib/dvswitch/dvs/var.txt
 source /boot/dvsconfig.txt
 
