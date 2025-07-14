@@ -22,7 +22,7 @@ else
     exit 1
 fi
 #--------------------------------------------------------------
-
+# dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
 file=dvsstart_setup.sh
 
 sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/$file > /dev/null 2>&1
@@ -34,7 +34,7 @@ sudo ./$file
 sudo rm $file
 
 #------------------------------------------------------------
-
+# 이미지파일을 만든 이후에 프로그램의 업그레이드, 파일의 변경 등이 있는 내용 적용
 sudo wget https://github.com/hl5ky/dvsmu/raw/main/setup > /dev/null 2>&1
 
 sudo chmod +x setup
