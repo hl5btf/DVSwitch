@@ -1,11 +1,5 @@
 #!/bin/bash
 
-echo
-echo
-echo "----------------------------------------------------"
-echo
-echo "------------초기 설정을 시작합니다 ------------------"
-echo
 # 두 개의 파일이 모두 다운로드 가능한지 확인후 진행
 file1="dvsstart_dvsconfig.sh"
 file2="dvsmu_upgrade.sh"
@@ -15,15 +9,21 @@ url2="https://raw.githubusercontent.com/hl5btf/DVSMU/main/$file2"
 if sudo wget -q "$url1" -O "/usr/local/dvs/$file1" && sudo wget -q "$url2" -O "/usr/local/dvs/$file2"; then
     :
 else
-    echo "초기설정파일의 다운로드가 되지 않습니다."
-    echo
-    echo "인터넷 연결을 확인후 다시 부팅해 주세요."
+    echo "초기설정파일의 다운로드가 되지 않습니다.  인터넷 연결을 확인후 다시 부팅해 주세요."
     echo
     exit 1
 fi
+
+(
+#--------------------------------------------------------------
+# dvswitch-server 업그레이드
+sudo apt-get update > /dev/null 2>&1
+
+if apt-get -s upgrade | grep -q "^Inst dvswitch-server "; then
+		sudo apt-get install dvswitch-server -y > /dev/null 2>&1
+fi
 #--------------------------------------------------------------
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
-(
 sudo chmod +x /usr/local/dvs/$file1
 
 sudo /usr/local/dvs/$file1
@@ -36,7 +36,7 @@ sudo /usr/local/dvs/$file2
 
 ) > /dev/null 2>&1 &
 
-echo -n "please wait about 2 min "
+echo -n "please wait about 2~3 min "
 while kill -0 $! 2>/dev/null; do
     echo -n "."
     sleep 1
