@@ -16,12 +16,11 @@ fi
 
 (
 #--------------------------------------------------------------
-# dvswitch-server 업그레이드
-sudo apt-get update > /dev/null 2>&1
+# 업그레이드
 
-if apt-get -s upgrade | grep -q "^Inst dvswitch-server "; then
-		sudo apt-get install dvswitch-server -y > /dev/null 2>&1
-fi
+sudo apt-get update
+sudo apt-get upgrade
+
 #--------------------------------------------------------------
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
 sudo chmod +x /usr/local/dvs/$file1
@@ -36,7 +35,7 @@ sudo /usr/local/dvs/$file2
 
 ) > /dev/null 2>&1 &
 
-echo -n "please wait about 2~3 min "
+echo -n "please wait about 5 min "
 while kill -0 $! 2>/dev/null; do
     echo -n "."
     sleep 1
