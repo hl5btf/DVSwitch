@@ -7,15 +7,15 @@ echo
 echo "------------초기 설정을 시작합니다 ------------------"
 echo
 # 두 개의 파일이 모두 다운로드 가능한지 확인후 진행
-file1="dvsstart_setup.sh"
-file2="setup"
-url1="https://raw.githubusercontent.com/hl5btf/DVSwitch/main/$file1" > /dev/null 2>&1
-url2="https://github.com/hl5ky/dvsmu/raw/main/$file2" > /dev/null 2>&1
+file1="dvsstart_dvsconfig.sh"
+file2="dvsmu_upgrade.sh"
+url1="https://raw.githubusercontent.com/hl5btf/DVSwitch/main/$file1"
+url2="https://raw.githubusercontent.com/hl5btf/DVSMU/main/$file2"
 
-if sudo wget -q "$url1" -O "$file1" && sudo wget -q "$url2" -O "$file2"; then
+if sudo wget -q "$url1" -O "/usr/local/dvs/$file1" && sudo wget -q "$url2" -O "/usr/local/dvs/$file2"; then
     :
 else
-    echo "설정파일의 다운로드가 되지 않습니다."
+    echo "초기설정파일의 다운로드가 되지 않습니다."
     echo
     echo "인터넷 연결을 확인후 다시 부팅해 주세요."
     echo
@@ -23,22 +23,30 @@ else
 fi
 #--------------------------------------------------------------
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
-file=dvsstart_setup.sh
+(
+sudo chmod +x /usr/local/dvs/$file1
 
-sudo wget https://raw.githubusercontent.com/hl5btf/DVSwitch/main/$file > /dev/null 2>&1
-
-sudo chmod +x $file
-
-sudo ./$file
-
-sudo rm $file
+sudo /usr/local/dvs/$file1
 
 #------------------------------------------------------------
 # 이미지파일을 만든 이후에 프로그램의 업그레이드, 파일의 변경 등이 있는 내용 적용
-sudo wget https://github.com/hl5ky/dvsmu/raw/main/setup > /dev/null 2>&1
+sudo chmod +x /usr/local/dvs/$file2
 
-sudo chmod +x setup
+sudo /usr/local/dvs/$file2
 
-sudo ./setup
+) > /dev/null 2>&1 &
 
-sudo rm setup
+echo -n "please wait about 2 min "
+while kill -0 $! 2>/dev/null; do
+    echo -n "."
+    sleep 1
+done
+
+echo -e "\n초기설정이 완료되었습니다."
+echo
+
+sudo sed -i '/dvsstart\.sh/d' /etc/crontab > /dev/null 2>&1
+
+sudo rm /usr/local/dvs/$file1 > /dev/null 2>&1
+
+sudo rm /usr/local/dvs/$file2 > /dev/null 2>&1
