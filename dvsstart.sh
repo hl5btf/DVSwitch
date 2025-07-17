@@ -18,8 +18,8 @@ fi
 #--------------------------------------------------------------
 # 업그레이드
 
-sudo apt-get update
-sudo apt-get upgrade
+sudo apt-get update -y
+sudo apt-get install dvswitch-server -y
 
 #--------------------------------------------------------------
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
