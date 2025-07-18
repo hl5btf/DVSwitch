@@ -144,10 +144,13 @@ if [ ! -e $file ]; then
   # Shellinabox 설정
   var=SHELLINABOX_PORT=7388
   sudo sed -i "/PORT=/ c $var" $file
-  var="SHELLINABOX_ARGS=\"--no-beep --disable-ssl \""
-  sudo sed -i "/ARGS=/ c $var" $file
-  var=OPTS=\"--localhost-only\"
-  echo "$var" | sudo tee -a $file
+  var='SHELLINABOX_ARGS="--no-beep --disable-ssl "'
+  sudo sed -i "s|^SHELLINABOX_ARGS=.*|$var|" "$file"
+  var='OPTS="--localhost-only"'
+
+  grep -q "^OPTS=" "$file" \
+  && sudo sed -i "s|^OPTS=.*|$var|" "$file" \
+  || echo "$var" | sudo tee -a "$file"
 fi
 
 ### dvsstart.sh 파일 설치
