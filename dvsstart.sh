@@ -44,8 +44,11 @@ done
 echo -e "\n초기설정이 완료되었습니다."
 echo
 
-sudo sed -i '/dvsstart\.sh/d' /etc/crontab > /dev/null 2>&1
-
 sudo rm /usr/local/dvs/$file1 > /dev/null 2>&1
 
 sudo rm /usr/local/dvs/$file2 > /dev/null 2>&1
+
+
+sudo mv /etc/dvsstart.sh /etc/dvsstart.old > /dev/null 2>&1
+
+sudo systemctl disable --now dvsstart.timer > /dev/null 2>&1
