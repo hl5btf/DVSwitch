@@ -7,6 +7,7 @@ read -r -d '' ALIASES << 'EOF'
 alias dv="cd /usr/local/dvs"
 alias data="cd /var/lib/dvswitch/dvs"
 alias adv="cd /var/lib/dvswitch/dvs/adv"
+alias user="cd /var/lib/dvswitch/dvs/adv"
 alias lan="cd /var/lib/dvswitch/dvs/lan"
 alias tgdb="cd /var/lib/dvswitch/dvs/tgdb"
 alias ab="cd /opt/Analog_Bridge"
