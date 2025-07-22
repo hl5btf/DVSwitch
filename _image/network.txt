@@ -1,0 +1,12 @@
+
+[Ethernet]
+ip=192.168.0.162
+gateway=192.168.0.1
+
+
+
+[Wifi]
+ip=192.168.0.161
+gateway=192.168.0.1
+ssid=virus
+password=worldwidefriendship
