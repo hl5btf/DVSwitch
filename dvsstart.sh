@@ -48,6 +48,10 @@ sudo rm /usr/local/dvs/$file1 > /dev/null 2>&1
 
 sudo rm /usr/local/dvs/$file2 > /dev/null 2>&1
 
+sudo mv /etc/dvsstart.sh /etc/dvsstart.bak > /dev/null 2>&1
+
+exit 0
+
 
 sudo mv /etc/dvsstart.sh /etc/dvsstart.old > /dev/null 2>&1
 
