@@ -13,6 +13,7 @@ alias tgdb="cd /var/lib/dvswitch/dvs/tgdb"
 alias ab="cd /opt/Analog_Bridge"
 alias mb="cd /opt/MMDVM_Bridge"
 alias ar="cd /opt/Analog_Reflector"
+alias log="cd /var/log/dvswitch"
 EOF
 
 # 하나씩 확인하며, 기존에 없는 alias만 추가
