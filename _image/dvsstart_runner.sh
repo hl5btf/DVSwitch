@@ -3,9 +3,19 @@
 # /usr/local/bin/dvsstart-runner.sh
 
 BOOT_FLAG="/boot/firmware/dvsconfig.txt"
-LOG_FILE="/tmp/dvsstart-run.log"
+LOG_FILE="/var/log/dvswitch/dvsstart-run.log"
 
 echo "[DVSSTART] Service started at $(date)" >> "$LOG_FILE"
+
+# 로그 줄 수가 100줄 넘으면 최근 100줄만 유지
+MAX_LINES=100
+TOTAL_LINES=$(wc -l < "$LOG_FILE")
+
+if [ "$TOTAL_LINES" -gt "$MAX_LINES" ]; then
+    tail -n $MAX_LINES "$LOG_FILE" > "${LOG_FILE}.tmp"
+    mv "${LOG_FILE}.tmp" "$LOG_FILE"
+fi
+
 
 # ✅ /boot 마운트 될 때까지 대기 (무제한)
 while [ ! -f "$BOOT_FLAG" ]; do
@@ -41,4 +51,5 @@ while true; do
   fi
   sleep 10
 done
+
 
