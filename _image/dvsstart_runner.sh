@@ -7,6 +7,9 @@ LOG_FILE="/var/log/dvswitch/dvsstart-run.log"
 
 echo "[DVSSTART] Service started at $(date)" >> "$LOG_FILE"
 
+# 로그 없으면 생성
+[ -f "$LOG_FILE" ] || touch "$LOG_FILE"
+
 # 로그 줄 수가 100줄 넘으면 최근 100줄만 유지
 MAX_LINES=100
 TOTAL_LINES=$(wc -l < "$LOG_FILE")
