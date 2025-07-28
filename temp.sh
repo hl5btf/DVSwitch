@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# temp.sh for Koreans
 #===================================
 SCRIPT_VERSION="Menu Script v.1.60"
 SCRIPT_AUTHOR="HL5KY"
