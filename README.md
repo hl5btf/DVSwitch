@@ -1,3 +1,2 @@
 - 전세계용 이미지에 한국용의 내용을 넣어서 한국용 이미지를 만들때 사용.
-- Debian을 Bookworm으로 변경하면서 network는 NetworkManager방식을 사용하기 때문에 임의로 만든 network.txt 파일에서 ip, ssid, pwd 등을 불러와서 설정함.
-- dhcpcd.txt, wpa_supplicant.txt 는 더 이상 사용하지 않음.
+- Debian을 Bookworm으로 변경하면서 network는 NetworkManager방식을 사용.
