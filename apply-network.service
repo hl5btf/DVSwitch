@@ -1,0 +1,12 @@
+# /etc/systemd/system/apply-network.service
+
+[Unit]
+Description=Apply network settings from /boot/firmware/network.txt
+After=network.target NetworkManager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/apply-network.sh
+
+[Install]
+WantedBy=multi-user.target
