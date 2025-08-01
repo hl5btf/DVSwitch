@@ -1,13 +1,11 @@
 #!/bin/bash
 
+# /usr/local/dvs/dvsstart_dvsconfig.sh
+
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 스크립트
 
-echo "dvsstart_dvsconfig.sh"
-exit 1
-
-
 source /var/lib/dvswitch/dvs/var.txt
-source /boot/dvsconfig.txt
+source /boot/firmware/dvsconfig.txt
 
 if [ "${first_time_instl}" = "73" ] && [ "$startup_lan" = "73" ]; then
 file=/etc/rc.local
@@ -18,9 +16,6 @@ fi
 if [ $chg = "1" ] && [ "${first_time_instl}" = "1" ]; then
 
 sudo cp -f /var/lib/dvswitch/dvs/lan/korean.txt /var/lib/dvswitch/dvs/lan/language.txt
-
-source /var/lib/dvswitch/dvs/var.txt
-source /boot/dvsconfig.txt
 
 update_var rx_freq 430000000
 update_var tx_freq 430000000
@@ -61,7 +56,7 @@ sudo ${DVS}temp_msg.sh -y
 
 update_var startup_lan 73
 
-file=/boot/dvsconfig.txt
+file=/boot/firmware/dvsconfig.txt
         sudo sed -i -e "/^chg/ c chg=0" $file
 
 file=/etc/rc.local
