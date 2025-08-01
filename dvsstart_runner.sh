@@ -2,6 +2,8 @@
 
 # /usr/local/bin/dvsstart-runner.sh
 
+# /etc/systemd/system/dvsstart.service에서 dvsstart-runner.sh를 실행할때 root로 실행하기 때문에 아래의 스크립트에는 sudo를 사용할 필요없음.
+
 BOOT_FLAG="/boot/firmware/dvsconfig.txt"
 LOG_FILE="/var/log/dvswitch/dvsstart-run.log"
 DVS_SCRIPT="/etc/dvsstart.sh"
