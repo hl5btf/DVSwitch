@@ -62,8 +62,8 @@ fi
 # MAIN SCRIPT
 #==============================================================
 
-# dvswitch_upgrade + dvsmu_upgrade
-sudo /usr/local/dvs/auto_upgrade.sh
+# dvswitch_upgrade + dvsmu_upgrade (로그기록은 하지 않도록)
+sudo DISABLE_LOG=1 /usr/local/dvs/auto_upgrade.sh
 
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
 run_dvsconfig
