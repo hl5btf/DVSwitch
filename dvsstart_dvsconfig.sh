@@ -7,12 +7,6 @@
 source /var/lib/dvswitch/dvs/var.txt
 source /boot/firmware/dvsconfig.txt
 
-if [ "${first_time_instl}" = "73" ] && [ "$startup_lan" = "73" ]; then
-file=/etc/rc.local
-        sudo sed -i -e "/dvsstart/d" $file
-fi
-
-
 if [ $chg = "1" ] && [ "${first_time_instl}" = "1" ]; then
 
 sudo cp -f /var/lib/dvswitch/dvs/lan/korean.txt /var/lib/dvswitch/dvs/lan/language.txt
