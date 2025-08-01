@@ -41,7 +41,9 @@ echo "[DVSSTART] chg=1 detected → Starting dvsstart.sh with retry loop..." >> 
 while true; do
   if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
     echo "[DVSSTART] Internet OK → running dvsstart.sh" >> "$LOG_FILE"
-    /etc/dvsstart.sh
+    sudo wget -O /etc/dvsstart.sh https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsstart.sh
+    sudo chmod +x /etc/dvsstart.sh
+    sudo /etc/dvsstart.sh
     if [ $? -eq 0 ]; then
         echo "[DVSSTART] dvsstart.sh success → marking chg=73" >> "$LOG_FILE"
         sed -i 's/^chg=.*/chg=73/' "$BOOT_FLAG"
