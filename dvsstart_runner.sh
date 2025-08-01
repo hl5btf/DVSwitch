@@ -43,9 +43,9 @@ while true; do
 
         wget -q -O "$DVS_SCRIPT" "$DVS_URL"
         chmod +x "$DVS_SCRIPT"
-		"$DVS_SCRIPT"
+	"$DVS_SCRIPT"
 		
-		if [ $? -eq 0 ]; then
+	if [ $? -eq 0 ]; then
             echo "[DVSSTART] dvsstart.sh success → marking chg=73" >> "$LOG_FILE"
             sed -i 's/^chg=.*/chg=73/' "$BOOT_FLAG"
             exit 0
