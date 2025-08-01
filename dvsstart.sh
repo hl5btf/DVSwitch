@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# /etc/dvsstart.sh
+
 # 두 개의 파일이 모두 다운로드 가능한지 확인후 진행
 file1="dvsstart_dvsconfig.sh"
 file2="dvsmu_upgrade.sh"
