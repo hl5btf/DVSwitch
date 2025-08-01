@@ -51,6 +51,7 @@ update_var desc "DVSwitch"
 update_var url https:\/\/www.qrz.com\/db\/${callsign}
 
 sudo ${DVS}init_config.sh return > /dev/null 2>&1
+# sudo ${DVS}config_main_user.sh return > /dev/null 2>&1
 
 sudo ${DVS}temp_msg.sh -y
 
