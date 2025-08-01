@@ -3,31 +3,10 @@
 # /etc/dvsstart.sh
 
 #==============================================================
-# Function dvswitch_upgrade
-#==============================================================
-function dvswitch_upgrade() {
-sudo apt-get update -y
-sudo apt-get install dvswitch-server -y
-}
-
-#==============================================================
-# Function dvsmu_upgrade
-# 이미지파일을 만든 이후에 프로그램의 업그레이드, 파일의 변경 등이 있는 내용 적용
-#==============================================================
-function dvsmu_upgrade() {
-file="dvsmu_upgrade.sh"
-url="https://raw.githubusercontent.com/hl5btf/DVSMU/main/$file"
-sudo wget -q "$url" -O "/usr/local/dvs/$file"
-sudo chmod +x /usr/local/dvs/$file
-sudo /usr/local/dvs/$file
-sudo rm /usr/local/dvs/$file > /dev/null 2>&1
-}
-
-#==============================================================
-# Function dvsconfig
+# Function run_dvsconfig
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
 #==============================================================
-function dvsconfig() {
+function run_dvsconfig() {
 
 source /var/lib/dvswitch/dvs/var.txt
 source /boot/firmware/dvsconfig.txt
@@ -82,9 +61,13 @@ fi
 #==============================================================
 # MAIN SCRIPT
 #==============================================================
-dvswitch_upgrade
-dvsmu_upgrade
-dvsconfig
+
+# dvswitch_upgrade + dvsmu_upgrade
+sudo /usr/local/dvs/auto_upgrade.sh
+
+# dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
+run_dvsconfig
+
 sudo mv /etc/dvsstart.sh /etc/dvsstart.bak > /dev/null 2>&1
 
 exit 0
