@@ -38,7 +38,7 @@ fi
 
 echo "[DVSSTART] chg=1 detected → Starting dvsstart.sh with retry loop..." >> "$LOG_FILE"
 
-# 인터넷 연결 확인 후 설치 및 실행
+# 인터넷 연결 확인 후 dvsstart.sh 설치 및 실행
 while true; do
     if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
         echo "[DVSSTART] Internet OK → download and running dvsstart.sh" >> "$LOG_FILE"
