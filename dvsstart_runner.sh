@@ -13,7 +13,7 @@ MAX_LINES=100
 # 로그 파일 생성 및 초기 기록
 mkdir -p "$(dirname "$LOG_FILE")"
 [ -f "$LOG_FILE" ] || touch "$LOG_FILE"
-echo "[_RUNNER_] Service started at $(date) =============================" >> "$LOG_FILE"
+echo "[_RUNNER_] $(date) Service started =============================" >> "$LOG_FILE"
 
 # 로그 줄 수 제한
 TOTAL_LINES=$(wc -l < "$LOG_FILE")
@@ -59,7 +59,7 @@ while true; do
 
         # 3. 실행
         if "$DVS_SCRIPT"; then
-            echo "[_RUNNER_] dvsstart.sh executed successfully $(date +%T)" >> "$LOG_FILE" 
+            echo "[_RUNNER_] $(date +%T) dvsstart-runner.sh executed successfully" >> "$LOG_FILE" 
             sed -i 's/^chg=.*/chg=73/' "$BOOT_FLAG"
             exit 0
 	else
