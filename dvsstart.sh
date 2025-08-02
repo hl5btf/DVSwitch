@@ -12,7 +12,7 @@ function run_dvsconfig() {
 source /var/lib/dvswitch/dvs/var.txt
 source /boot/firmware/dvsconfig.txt
 
-#if [ $chg = "1" ] && [ "${first_time_instl}" = "1" ]; then
+if [ $chg = "1" ] && [ "${first_time_instl}" = "1" ]; then
 
 sudo cp -f /var/lib/dvswitch/dvs/lan/korean.txt /var/lib/dvswitch/dvs/lan/language.txt
 
@@ -56,7 +56,7 @@ sudo ${DVS}temp_msg.sh -y
 
 update_var startup_lan 73
 
-#fi
+fi
 }
 
 #==============================================================
