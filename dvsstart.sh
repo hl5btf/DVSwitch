@@ -14,7 +14,7 @@ source /var/lib/dvswitch/dvs/var.txt
 source /boot/firmware/dvsconfig.txt
 
 if [ $chg = "1" ] && [ "${first_time_instl}" = "1" ]; then
-echo "[dvsstart] $chg=1 && ${first_time_instl}=1 detected">> "$LOG_FILE"
+echo "[dvsstart] chg=1 && first_time_instl=1 detected">> "$LOG_FILE"
 echo "[dvsstart] copy variables from /boot/firmware/dvsconfig.txt to var.txt" >> "$LOG_FILE"
 sudo cp -f /var/lib/dvswitch/dvs/lan/korean.txt /var/lib/dvswitch/dvs/lan/language.txt
 
@@ -51,11 +51,11 @@ update_var lctn "${location}"
 update_var desc "DVSwitch"
 update_var url https:\/\/www.qrz.com\/db\/${callsign}
 
-echo "[dvsstart] Starting ${DVS}init_config.sh return" >> "$LOG_FILE"
+echo "[dvsstart] excute init_config.sh return" >> "$LOG_FILE"
 sudo ${DVS}init_config.sh return > /dev/null 2>&1
 # sudo ${DVS}config_main_user.sh return > /dev/null 2>&1
 
-echo "[dvsstart] ${DVS}temp_msg.sh -y" >> "$LOG_FILE"
+echo "[dvsstart] temp_msg.sh -y" >> "$LOG_FILE"
 sudo ${DVS}temp_msg.sh -y
 
 echo "[dvsstart] update_var startup_lan 73" >> "$LOG_FILE"
