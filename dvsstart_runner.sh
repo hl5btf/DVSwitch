@@ -6,6 +6,7 @@
 
 BOOT_FLAG="/boot/firmware/dvsconfig.txt"
 LOG_FILE="/var/log/dvswitch/dvsstart-run.log"
+TMP_FILE="/var/log/dvswitch/dvsstart-run.trim"
 DVS_SCRIPT="/etc/dvsstart.sh"
 DVS_URL="https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsstart.sh"
 MAX_LINES=100
@@ -16,10 +17,7 @@ mkdir -p "$(dirname "$LOG_FILE")"
 echo "[_RUNNER_] $(date) Service started =============================" >> "$LOG_FILE"
 
 # 로그 줄 수 제한
-TOTAL_LINES=$(wc -l < "$LOG_FILE")
-if [ "$TOTAL_LINES" -gt "$MAX_LINES" ]; then
-    tail -n $MAX_LINES "$LOG_FILE" > "${LOG_FILE}.tmp" && mv "${LOG_FILE}.tmp" "$LOG_FILE"
-fi
+tail -n "$MAX_LINES" "$LOG_FILE" > "$TMP_FILE" && cp "$TMP_FILE" "$LOG_FILE"
 
 # /boot 마운트될 때까지 대기
 while [ ! -f "$BOOT_FLAG" ]; do
