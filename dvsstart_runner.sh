@@ -41,17 +41,28 @@ echo "[DVSSTART] chg=1 detected → Starting dvsstart.sh with retry loop..." >> 
 # 인터넷 연결 확인 후 설치 및 실행
 while true; do
     if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
-        echo "[DVSSTART] Internet OK → running dvsstart.sh" >> "$LOG_FILE"
+        echo "[DVSSTART] Internet OK → download and running dvsstart.sh" >> "$LOG_FILE"
 
-        wget -q -O "$DVS_SCRIPT" "$DVS_URL"
-        chmod +x "$DVS_SCRIPT"
-	"$DVS_SCRIPT"
-		
-	if [ $? -eq 0 ]; then
-            echo "[DVSSTART] dvsstart.sh success → marking chg=73" >> "$LOG_FILE"
+	# 1. 다운로드
+        if ! wget -q -O "$DVS_SCRIPT" "$DVS_URL"; then
+            echo "[DVSSTART] Failed to download dvsstart.sh" >> "$LOG_FILE"
+            exit 1
+        fi
+        echo "[DVSSTART] Downloaded dvsstart.sh" >> "$LOG_FILE"
+
+	# 2. 실행 권한
+        if ! chmod +x "$DVS_SCRIPT"; then
+            echo "[DVSSTART] Failed to chmod dvsstart.sh" >> "$LOG_FILE"
+            exit 1
+        fi
+        echo "[DVSSTART] Made dvsstart.sh executable" >> "$LOG_FILE" 
+
+        # 3. 실행
+        if "$DVS_SCRIPT"; then
+            echo "[DVSSTART] dvsstart.sh executed successfully" >> "$LOG_FILE" 
             sed -i 's/^chg=.*/chg=73/' "$BOOT_FLAG"
             exit 0
-        else
+	else
             echo "[DVSSTART] dvsstart.sh failed → retrying in 10s" >> "$LOG_FILE"
         fi
     else
