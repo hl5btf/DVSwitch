@@ -3,6 +3,7 @@
 # /usr/local/bin/apply-network.sh
 
 CONFIG_FILE="/boot/firmware/network.txt"
+DNS_SERVERS="8.8.8.8 1.1.1.1"
 
 if [ ! -f "$CONFIG_FILE" ]; then
   echo "[apply-network] No /boot/firmware/network.txt found. Skipping..."
@@ -25,6 +26,7 @@ if [ -n "$ETH_IP" ] && [ -n "$ETH_GW" ]; then
   echo "[apply-network] Setting static IP for eth0: $ETH_IP"
   nmcli con mod "Wired connection 1" ipv4.addresses "$ETH_IP/24"
   nmcli con mod "Wired connection 1" ipv4.gateway "$ETH_GW"
+  nmcli con mod "Wired connection 1" ipv4.dns "$DNS_SERVERS"
   nmcli con mod "Wired connection 1" ipv4.method manual
   nmcli con up "Wired connection 1"
 else
@@ -43,6 +45,7 @@ if [ -n "$WIFI_SSID" ]; then
     echo "[apply-network] Setting static IP for Wi-Fi: $WIFI_IP"
     nmcli con mod "$WIFI_SSID" ipv4.addresses "$WIFI_IP/24"
     nmcli con mod "$WIFI_SSID" ipv4.gateway "$WIFI_GW"
+    nmcli con mod "$WIFI_SSID" ipv4.dns "$DNS_SERVERS"
     nmcli con mod "$WIFI_SSID" ipv4.method manual
     nmcli con up "$WIFI_SSID"
   else
