@@ -8,7 +8,7 @@
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
 #==============================================================
 function run_dvsconfig() {
-echo "[dvsstart] run_dvsconfig started $(date +%T)" >> "$LOG_FILE"
+echo "[dvsstart] $(date +%T) run_dvsconfig started" >> "$LOG_FILE"
 
 source /var/lib/dvswitch/dvs/var.txt
 source /boot/firmware/dvsconfig.txt
@@ -51,14 +51,14 @@ update_var lctn "${location}"
 update_var desc "DVSwitch"
 update_var url https:\/\/www.qrz.com\/db\/${callsign}
 
-echo "[dvsstart] excute init_config.sh return $(date +%T)" >> "$LOG_FILE"
+echo "[dvsstart] $(date +%T) excute init_config.sh return" >> "$LOG_FILE"
 sudo ${DVS}init_config.sh return > /dev/null 2>&1
 # sudo ${DVS}config_main_user.sh return > /dev/null 2>&1
 
-echo "[dvsstart] temp_msg.sh -y $(date +%T)" >> "$LOG_FILE"
+echo "[dvsstart] $(date +%T) temp_msg.sh -y" >> "$LOG_FILE"
 sudo ${DVS}temp_msg.sh -y
 
-echo "[dvsstart] update_var startup_lan 73 $(date +%T)" >> "$LOG_FILE"
+echo "[dvsstart] $(date +%T) update_var startup_lan 73" >> "$LOG_FILE"
 update_var startup_lan 73
 
 fi
@@ -68,14 +68,14 @@ fi
 # MAIN SCRIPT
 #==============================================================
 LOG_FILE="/var/log/dvswitch/dvsstart-run.log"
-    echo "[dvsstart] dvsstart.sh started $(date +%T)" >> "$LOG_FILE"
+    echo "[dvsstart] $(date +%T) dvsstart.sh started" >> "$LOG_FILE"
 
 # dvswitch_upgrade + dvsmu_upgrade (로그기록은 하지 않도록)
 sudo env DISABLE_LOG=1 /usr/local/dvs/auto_upgrade.sh
-    echo "[dvsstart] auto_upgrade.sh excuted sucessfully $(date +%T)" >> "$LOG_FILE"
+    echo "[dvsstart] $(date +%T) auto_upgrade.sh excuted sucessfully" >> "$LOG_FILE"
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
 run_dvsconfig
-    echo "[dvsstart] dvsstart.sh excuted sucessfully $(date +%T)" >> "$LOG_FILE"
+    echo "[dvsstart] $(date +%T) dvsstart.sh excuted sucessfully" >> "$LOG_FILE"
 
     echo "[dvsstart] mv /etc/dvsstart.sh /etc/dvsstart.bak" >> "$LOG_FILE"
 sudo mv /etc/dvsstart.sh /etc/dvsstart.bak > /dev/null 2>&1
