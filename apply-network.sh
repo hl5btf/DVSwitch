@@ -1,58 +1,71 @@
 #!/bin/bash
-
-# /usr/local/bin/apply-network.sh
-
 CONFIG_FILE="/boot/firmware/network.txt"
 DNS_SERVERS="8.8.8.8 1.1.1.1"
 
-if [ ! -f "$CONFIG_FILE" ]; then
-  echo "[apply-network] No /boot/firmware/network.txt found. Skipping..."
-  exit 0
-fi
+# 파일이 없으면 종료
+[ -f "$CONFIG_FILE" ] || exit 0
 
-# 값 읽기
-ETH_IP=$(awk -F= "/\\[Ethernet\\]/ {f=1;next} /\\[/{f=0} f && /ip=/ {print \$2}" "$CONFIG_FILE" | tr -d " ")
-ETH_GW=$(awk -F= "/\\[Ethernet\\]/ {f=1;next} /\\[/{f=0} f && /gateway=/ {print \$2}" "$CONFIG_FILE" | tr -d " ")
+# 파일 파싱
+ETH_IP=""
+ETH_GW=""
+WIFI_IP=""
+WIFI_GW=""
+WIFI_SSID=""
+WIFI_PW=""
 
-WIFI_SSID=$(awk -F= "/\\[Wifi\\]/ {f=1;next} /\\[/{f=0} f && /ssid=/ {print \$2}" "$CONFIG_FILE" | tr -d " ")
-WIFI_PASS=$(awk -F= "/\\[Wifi\\]/ {f=1;next} /\\[/{f=0} f && /password=/ {print \$2}" "$CONFIG_FILE" | tr -d " ")
-WIFI_IP=$(awk -F= "/\\[Wifi\\]/ {f=1;next} /\\[/{f=0} f && /ip=/ {print \$2}" "$CONFIG_FILE" | tr -d " ")
-WIFI_GW=$(awk -F= "/\\[Wifi\\]/ {f=1;next} /\\[/{f=0} f && /gateway=/ {print \$2}" "$CONFIG_FILE" | tr -d " ")
+current_section=""
 
-echo "[apply-network] Applying settings from /boot/firmware/network.txt..."
+while IFS='=' read -r key value; do
+    key=$(echo "$key" | tr -d ' ')
+    value=$(echo "$value" | sed 's/^ *//' | sed 's/ *$//' | tr -d '"')
 
-# Ethernet 설정
+    case "$key" in
+        \[*\])
+            current_section=$(echo "$key" | tr -d '[]')
+            ;;
+        ip)
+            if [ "$current_section" = "Ethernet" ]; then
+                ETH_IP="$value"
+            elif [ "$current_section" = "Wifi" ]; then
+                WIFI_IP="$value"
+            fi
+            ;;
+        gateway)
+            if [ "$current_section" = "Ethernet" ]; then
+                ETH_GW="$value"
+            elif [ "$current_section" = "Wifi" ]; then
+                WIFI_GW="$value"
+            fi
+            ;;
+        ssid)
+            WIFI_SSID="$value"
+            ;;
+        password)
+            WIFI_PW="$value"
+            ;;
+    esac
+done < "$CONFIG_FILE"
+
+# 유선 설정
 if [ -n "$ETH_IP" ] && [ -n "$ETH_GW" ]; then
-  echo "[apply-network] Setting static IP for eth0: $ETH_IP"
-  nmcli con mod "Wired connection 1" ipv4.addresses "$ETH_IP/24"
-  nmcli con mod "Wired connection 1" ipv4.gateway "$ETH_GW"
-  nmcli con mod "Wired connection 1" ipv4.dns "$DNS_SERVERS"
-  nmcli con mod "Wired connection 1" ipv4.method manual
-  nmcli con up "Wired connection 1"
-else
-  echo "[apply-network] Using DHCP for eth0"
-  nmcli con mod "Wired connection 1" ipv4.method auto
-  nmcli con up "Wired connection 1"
+    nmcli con delete "ethernet-static" >/dev/null 2>&1
+    nmcli con add type ethernet ifname eth0 con-name "ethernet-static" \
+        ipv4.method manual \
+        ipv4.addresses "$ETH_IP/24" \
+        ipv4.gateway "$ETH_GW" \
+        ipv4.dns "$DNS_SERVERS" \
+        connection.autoconnect yes
 fi
 
-# Wi-Fi 설정
-if [ -n "$WIFI_SSID" ]; then
-  echo "[apply-network] Configuring Wi-Fi: $WIFI_SSID"
-  nmcli connection delete "$WIFI_SSID" 2>/dev/null
-  nmcli device wifi connect "$WIFI_SSID" password "$WIFI_PASS"
-
-  if [ -n "$WIFI_IP" ] && [ -n "$WIFI_GW" ]; then
-    echo "[apply-network] Setting static IP for Wi-Fi: $WIFI_IP"
-    nmcli con mod "$WIFI_SSID" ipv4.addresses "$WIFI_IP/24"
-    nmcli con mod "$WIFI_SSID" ipv4.gateway "$WIFI_GW"
-    nmcli con mod "$WIFI_SSID" ipv4.dns "$DNS_SERVERS"
-    nmcli con mod "$WIFI_SSID" ipv4.method manual
-    nmcli con up "$WIFI_SSID"
-  else
-    echo "[apply-network] Using DHCP for Wi-Fi"
-    nmcli con mod "$WIFI_SSID" ipv4.method auto
-    nmcli con up "$WIFI_SSID"
-  fi
-else
-  echo "[apply-network] No Wi-Fi SSID provided. Skipping Wi-Fi config."
+# 무선 설정
+if [ -n "$WIFI_SSID" ] && [ -n "$WIFI_PW" ] && [ -n "$WIFI_IP" ] && [ -n "$WIFI_GW" ]; then
+    nmcli con delete "$WIFI_SSID" >/dev/null 2>&1
+    nmcli dev wifi connect "$WIFI_SSID" password "$WIFI_PW" ifname wlan0 name "$WIFI_SSID"
+    nmcli con modify "$WIFI_SSID" \
+        ipv4.method manual \
+        ipv4.addresses "$WIFI_IP/24" \
+        ipv4.gateway "$WIFI_GW" \
+        ipv4.dns "$DNS_SERVERS" \
+        connection.autoconnect yes
 fi
+
