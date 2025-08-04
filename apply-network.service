@@ -2,7 +2,7 @@
 
 [Unit]
 Description=Apply network.txt Wi-Fi config at boot
-After=local-fs.target network-pre.target
+After=network-pre.target
 Before=network.target
 Wants=network.target
 
@@ -13,3 +13,4 @@ RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
+
