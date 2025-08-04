@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# /usr/local/bin/apply-network.sh
+
 CONFIG_FILE="/boot/firmware/network.txt"
 WIFI_CONF="/var/lib/iwd"
 DNS_SERVERS="8.8.8.8 1.1.1.1"
