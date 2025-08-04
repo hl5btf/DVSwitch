@@ -1,13 +1,15 @@
 # /etc/systemd/system/apply-network.service
 
 [Unit]
-Description=Apply network settings from /boot/firmware/network.txt
-After=network.target NetworkManager.service
+Description=Apply network.txt Wi-Fi config at boot
+After=local-fs.target network-pre.target
+Before=network.target
 Wants=network.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/local/bin/apply-network.sh
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
