@@ -6,6 +6,9 @@ CONFIG_FILE="/boot/firmware/network.txt"
 WIFI_CONF="/var/lib/iwd"
 DNS_SERVERS="8.8.8.8 1.1.1.1"
 
+# rfkill 해제: Wi-Fi가 소프트 블록 상태이면 해제
+rfkill unblock wifi
+
 [ -f "$CONFIG_FILE" ] || exit 0
 
 ETH_IP=""; ETH_GW=""
