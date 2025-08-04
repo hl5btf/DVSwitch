@@ -3,82 +3,95 @@
 # /usr/local/bin/apply-network.sh
 
 CONFIG_FILE="/boot/firmware/network.txt"
-WIFI_CONF="/var/lib/iwd"
-DNS_SERVERS="8.8.8.8 1.1.1.1"
+WPA_CONF="/etc/wpa_supplicant/wpa_supplicant.conf"
+DHCPCD_CONF="/etc/dhcpcd.conf"
 
-# rfkill 해제: Wi-Fi가 소프트 블록 상태이면 해제
-rfkill unblock wifi
-
+# 파일이 없으면 종료
 [ -f "$CONFIG_FILE" ] || exit 0
 
-ETH_IP=""; ETH_GW=""
-WIFI_IP=""; WIFI_GW=""; WIFI_SSID=""; WIFI_PW=""
+# 변수 초기화
+ETH_IP=""
+ETH_GW=""
+ETH_DNS=""
+WIFI_IP=""
+WIFI_GW=""
+WIFI_DNS=""
+WIFI_SSID=""
+WIFI_PW=""
 
-section=""
+current_section=""
+
+# config 파싱
 while IFS='=' read -r key value; do
     key=$(echo "$key" | tr -d ' ')
     value=$(echo "$value" | sed 's/^ *//' | sed 's/ *$//')
-    [[ "$value" =~ ^\".*\"$ ]] && value="${value:1:-1}"
 
     case "$key" in
-        "[Ethernet]") section="eth" ;;
-        "[Wifi]") section="wifi" ;;
+        \[*\])
+            current_section="${key//[\[\]]/}"
+            ;;
         ip)
-            [[ "$section" == "eth" ]] && ETH_IP="$value"
-            [[ "$section" == "wifi" ]] && WIFI_IP="$value"
+            if [ "$current_section" == "Ethernet" ]; then
+                ETH_IP="$value"
+            elif [ "$current_section" == "Wifi" ]; then
+                WIFI_IP="$value"
+            fi
             ;;
         gateway)
-            [[ "$section" == "eth" ]] && ETH_GW="$value"
-            [[ "$section" == "wifi" ]] && WIFI_GW="$value"
+            if [ "$current_section" == "Ethernet" ]; then
+                ETH_GW="$value"
+            elif [ "$current_section" == "Wifi" ]; then
+                WIFI_GW="$value"
+            fi
             ;;
-        ssid) WIFI_SSID="$value" ;;
-        password) WIFI_PW="$value" ;;
+        dns)
+            if [ "$current_section" == "Ethernet" ]; then
+                ETH_DNS="$value"
+            elif [ "$current_section" == "Wifi" ]; then
+                WIFI_DNS="$value"
+            fi
+            ;;
+        ssid)
+            WIFI_SSID=$(echo "$value" | sed 's/^"\(.*\)"$/\1/')
+            ;;
+        password)
+            WIFI_PW=$(echo "$value" | sed 's/^"\(.*\)"$/\1/')
+            ;;
     esac
 done < "$CONFIG_FILE"
 
-# 공통 DNS 설정 적용 (resolv.conf)
-rm -f /etc/resolv.conf
-echo "nameserver 8.8.8.8" > /etc/resolv.conf
-echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+# Wi-Fi 설정
+cat <<EOF | sudo tee "$WPA_CONF" > /dev/null
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=KR
 
-# 유선 설정
-if [ -n "$ETH_IP" ] && [ -n "$ETH_GW" ]; then
-    ip link set dev eth0 up
-    ip addr flush dev eth0
-    ip addr add "$ETH_IP/24" dev eth0
-    ip route del default || true
-    ip route add default via "$ETH_GW" dev eth0
-fi
-
-# 무선 설정
-if [ -n "$WIFI_SSID" ] && [ -n "$WIFI_PW" ]; then
-    PSK_FILE="$WIFI_CONF/${WIFI_SSID}.psk"
-    NETWORK_FILE="$WIFI_CONF/${WIFI_SSID}.network"
-
-    cat <<EOF > "$PSK_FILE"
-[Security]
-PreSharedKey=$WIFI_PW
-
-[Settings]
-AutoConnect=true
+network={
+    ssid="$WIFI_SSID"
+    psk="$WIFI_PW"
+}
 EOF
 
-    cat <<EOF > "$NETWORK_FILE"
-[IPv4]
-Address=$WIFI_IP
-Gateway=$WIFI_GW
-DNS=$DNS_SERVERS
-EOF
+chmod 600 "$WPA_CONF"
 
-    chown iwd:iwd "$PSK_FILE" "$NETWORK_FILE"
-    chmod 600 "$PSK_FILE" "$NETWORK_FILE"
+# rfkill 해제
+rfkill unblock wifi
 
-    systemctl restart iwd
-    sleep 10
+# dhcpcd.conf 설정
+sudo cp /etc/dhcpcd.conf /etc/dhcpcd.conf.bak
 
-    ip addr flush dev wlan0
-    ip addr add "$WIFI_IP/24" dev wlan0
-    ip route del default || true
-    ip route add default via "$WIFI_GW" dev wlan0
-fi
+{
+    echo ""
+    echo "# Ethernet 설정"
+    echo "interface eth0"
+    echo "static ip_address=${ETH_IP}/24"
+    echo "static routers=${ETH_GW}"
+    echo "static domain_name_servers=${ETH_DNS}"
 
+    echo ""
+    echo "# Wi-Fi 설정"
+    echo "interface wlan0"
+    echo "static ip_address=${WIFI_IP}/24"
+    echo "static routers=${WIFI_GW}"
+    echo "static domain_name_servers=${WIFI_DNS}"
+} | sudo tee -a "$DHCPCD_CONF" > /dev/null
