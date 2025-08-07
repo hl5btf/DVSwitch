@@ -14,7 +14,7 @@ MAX_LINES=100
 # 로그 파일 생성 및 초기 기록
 mkdir -p "$(dirname "$LOG_FILE")"
 [ -f "$LOG_FILE" ] || touch "$LOG_FILE"
-echo
+echo "" >> "$LOG_FILE"
 echo "[_RUNNER_] $(date) Service started =============================" >> "$LOG_FILE"
 
 # 로그 줄 수 제한
