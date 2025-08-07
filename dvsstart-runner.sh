@@ -57,7 +57,7 @@ while true; do
 
         # 3. 실행
         if "$DVS_SCRIPT"; then
-            echo "[_RUNNER_] $(date +%T) dvsstart-runner.sh executed successfully" >> "$LOG_FILE" 
+            echo "[_RUNNER_] $(date +%T) back to dvsstart-runner.sh and finish" >> "$LOG_FILE" 
             sed -i 's/^chg=.*/chg=73/' "$BOOT_FLAG"
             exit 0
 	else
