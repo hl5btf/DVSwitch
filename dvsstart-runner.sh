@@ -21,39 +21,39 @@ tail -n "$MAX_LINES" "$LOG_FILE" > "$TMP_FILE" && cp "$TMP_FILE" "$LOG_FILE"
 
 # /boot 마운트될 때까지 대기
 while [ ! -f "$BOOT_FLAG" ]; do
-    echo "[_RUNNER_] Waiting for /boot mount..." >> "$LOG_FILE"
+    echo "[_RUNNER_] $(date +%T) Waiting for /boot mount..." >> "$LOG_FILE"
     sleep 2
 done
-echo "[_RUNNER_] /boot detected!" >> "$LOG_FILE"
+echo "[_RUNNER_] $(date +%T) /boot detected!" >> "$LOG_FILE"
 
 # 설정값 확인
 source "$BOOT_FLAG"
 CHG="${chg:-0}"
 if [ "$CHG" != "1" ]; then
-    echo "[_RUNNER_] Skipping (chg=$CHG)" >> "$LOG_FILE"
+    echo "[_RUNNER_] $(date +%T) Skipping (dvsconfig.txt - chg=$CHG)" >> "$LOG_FILE"
     exit 0
 fi
 
-echo "[_RUNNER_] chg=1 detected → Starting dvsstart.sh with retry loop..." >> "$LOG_FILE"
+echo "[_RUNNER_] $(date +%T) chg=1 detected → Starting dvsstart.sh with retry loop..." >> "$LOG_FILE"
 
 # 인터넷 연결 확인 후 dvsstart.sh 설치 및 실행
 while true; do
     if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
-        echo "[_RUNNER_] Internet OK → download and running dvsstart.sh" >> "$LOG_FILE"
+        echo "[_RUNNER_] $(date +%T) Internet OK → download and running dvsstart.sh" >> "$LOG_FILE"
 
 	# 1. 다운로드
         if ! wget -q -O "$DVS_SCRIPT" "$DVS_URL"; then
-            echo "[_RUNNER_] Failed to download dvsstart.sh" >> "$LOG_FILE"
+            echo "[_RUNNER_] $(date +%T) Failed to download dvsstart.sh" >> "$LOG_FILE"
             exit 1
         fi
-        echo "[_RUNNER_] Downloaded dvsstart.sh" >> "$LOG_FILE"
+        echo "[_RUNNER_] $(date +%T) Downloaded dvsstart.sh" >> "$LOG_FILE"
 
 	# 2. 실행 권한
         if ! chmod +x "$DVS_SCRIPT"; then
-            echo "[_RUNNER_] Failed to chmod dvsstart.sh" >> "$LOG_FILE"
+            echo "[_RUNNER_] $(date +%T) Failed to chmod dvsstart.sh" >> "$LOG_FILE"
             exit 1
         fi
-        echo "[_RUNNER_] Made dvsstart.sh executable" >> "$LOG_FILE" 
+        echo "[_RUNNER_] $(date +%T) Made dvsstart.sh executable" >> "$LOG_FILE" 
 
         # 3. 실행
         if "$DVS_SCRIPT"; then
@@ -61,10 +61,10 @@ while true; do
             sed -i 's/^chg=.*/chg=73/' "$BOOT_FLAG"
             exit 0
 	else
-            echo "[_RUNNER_] dvsstart.sh failed → retrying in 10s" >> "$LOG_FILE"
+            echo "[_RUNNER_] $(date +%T) dvsstart.sh failed → retrying in 10s" >> "$LOG_FILE"
         fi
     else
-        echo "[_RUNNER_] Internet not ready → retrying in 10s" >> "$LOG_FILE"
+        echo "[_RUNNER_] $(date +%T) Internet not ready → retrying in 10s" >> "$LOG_FILE"
     fi
     sleep 10
 done
