@@ -14,8 +14,8 @@ source /var/lib/dvswitch/dvs/var.txt
 source /boot/firmware/dvsconfig.txt
 
 if [ $chg = "1" ] && [ "${first_time_instl}" = "1" ]; then
-echo "[dvsstart] chg=1 && first_time_instl=1 detected">> "$LOG_FILE"
-echo "[dvsstart] copy variables from /boot/firmware/dvsconfig.txt to var.txt" >> "$LOG_FILE"
+echo "[dvsstart] $(date +%T) chg=1 && first_time_instl=1 detected">> "$LOG_FILE"
+echo "[dvsstart] $(date +%T) copy variables from /boot/firmware/dvsconfig.txt to var.txt" >> "$LOG_FILE"
 sudo cp -f /var/lib/dvswitch/dvs/lan/korean.txt /var/lib/dvswitch/dvs/lan/language.txt
 
 update_var rx_freq 430000000
@@ -60,6 +60,10 @@ sudo ${DVS}temp_msg.sh -y
 
 echo "[dvsstart] $(date +%T) update_var startup_lan 73" >> "$LOG_FILE"
 update_var startup_lan 73
+echo "[dvsstart] $(date +%T) dvsstart.sh excuted sucessfully" >> "$LOG_FILE"
+
+else
+echo "[dvsstart] $(date +%T) chg=73 OR first_time_instl=73 detected - exit run_dvsconfig" >> "$LOG_FILE"
 
 fi
 }
@@ -75,9 +79,8 @@ sudo env DISABLE_LOG=1 /usr/local/dvs/auto_upgrade.sh
     echo "[dvsstart] $(date +%T) auto_upgrade.sh excuted sucessfully" >> "$LOG_FILE"
 # dvsconfig.txt에 설정한 항목을 이용하여 초기 설정을 자동으로 하는 루틴
 run_dvsconfig
-    echo "[dvsstart] $(date +%T) dvsstart.sh excuted sucessfully" >> "$LOG_FILE"
 
-    echo "[dvsstart] mv /etc/dvsstart.sh /etc/dvsstart.bak" >> "$LOG_FILE"
+echo "[dvsstart] $(date +%T) mv /etc/dvsstart.sh /etc/dvsstart.bak" >> "$LOG_FILE"
 sudo mv /etc/dvsstart.sh /etc/dvsstart.bak > /dev/null 2>&1
 
 exit 0
