@@ -63,7 +63,7 @@ update_var startup_lan 73
 echo "[dvsstart] $(date +%T) dvsstart.sh excuted sucessfully" >> "$LOG_FILE"
 
 else
-echo "[dvsstart] $(date +%T) chg=73 OR first_time_instl=73 detected - exit run_dvsconfig" >> "$LOG_FILE"
+echo "[dvsstart] $(date +%T) var.txt - first_time_instl=73 detected - exit run_dvsconfig" >> "$LOG_FILE"
 
 fi
 }
