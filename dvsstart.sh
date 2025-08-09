@@ -72,7 +72,8 @@ fi
 # MAIN SCRIPT
 #==============================================================
 LOG_FILE="/var/log/dvswitch/dvsstart-run.log"
-    echo "[dvsstart] $(date +%T) dvsstart.sh started" >> "$LOG_FILE"
+
+echo "[dvsstart] $(date +%T) dvsstart.sh started" >> "$LOG_FILE"
 
 # dvswitch_upgrade + dvsmu_upgrade (로그기록은 하지 않도록)
 sudo env DISABLE_LOG=1 /usr/local/dvs/auto_upgrade.sh
