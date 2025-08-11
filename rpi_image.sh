@@ -96,21 +96,21 @@ sudo apt install fonts-nanum fonts-unfonts-core fonts-noto-cjk
 
 # /boot/firmware 폴더에 파일 설치
 echo
-echo ">>> downloading files"
+echo ">>> downloading files. dvsconfig.txt, dvsSetup.exe, dvsNetwork.exe, network.txt"
 
 # /boot/firmware/dvsconfig.txt
-sudo wget -O /boot/firmware/dvsconfig.txt https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsconfig.txt
+sudo wget -O /boot/firmware/dvsconfig.txt https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsconfig.txt > /dev/null 2>&1
 # chg 의 기본값이 73으로 되어 있음
 
 # /boot/firmware/dvsSetup.exe
-sudo wget -O /boot/firmware/dvsSetup.exe https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsSetup.exe
+sudo wget -O /boot/firmware/dvsSetup.exe https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsSetup.exe > /dev/null 2>&1
 
 # /boot/firmware/dvsNetwork.exe
-sudo wget -O /boot/firmware/dvsNetwork.exe https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsNetwork.exe
+sudo wget -O /boot/firmware/dvsNetwork.exe https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsNetwork.exe > /dev/null 2>&1
 
 #/boot/firmware/network.txt
 if [[ ! -f "/boot/firmware/network.txt" ]]; then
-	sudo wget -O /boot/firmware/network.txt https://raw.githubusercontent.com/hl5btf/DVSwitch/main/network.txt
+	sudo wget -O /boot/firmware/network.txt https://raw.githubusercontent.com/hl5btf/DVSwitch/main/network.txt > /dev/null 2>&1
 fi
 
 #=======================================================
