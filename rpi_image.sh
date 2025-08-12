@@ -150,13 +150,13 @@ echo "[✓] $FILE 수정 완료"
 #=======================================================
 # dvsstart.service, dvsstart-runner.sh 설치
 echo
-echo ">>> downloading files"
+echo ">>> downloading files. dvsstart.service, dvsstart-runner.sh"
 
 # dvsstart.service
-sudo wget -O /etc/systemd/system/dvsstart.service https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsstart.service
+sudo wget -O /etc/systemd/system/dvsstart.service https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsstart.service > /dev/null 2>&1
 
 # dvsstart-runner.sh
-sudo wget -O /usr/local/bin/dvsstart-runner.sh https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsstart-runner.sh
+sudo wget -O /usr/local/bin/dvsstart-runner.sh https://raw.githubusercontent.com/hl5btf/DVSwitch/main/dvsstart-runner.sh > /dev/null 2>&1
 sudo chmod +x /usr/local/bin/dvsstart-runner.sh
 
 # 서비스 활성화
