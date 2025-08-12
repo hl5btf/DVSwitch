@@ -35,6 +35,12 @@ if [ "$CHG" != "1" ]; then
     exit 0
 fi
 
+CALLSIGN="${callsign:-HL1AAA}"
+if [ "$CALLSIGN" = "HL1AAA" ]; then
+    echo "[_RUNNER_] $(date +%T) Skipping (dvsconfig.txt - callsign=$CALLSIGN)" >> "$LOG_FILE"
+    exit 0
+fi
+
 echo "[_RUNNER_] $(date +%T) chg=1 detected → Starting dvsstart.sh with retry loop..." >> "$LOG_FILE"
 
 # 인터넷 연결 확인 후 dvsstart.sh 설치 및 실행
