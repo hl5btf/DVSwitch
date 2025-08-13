@@ -165,11 +165,8 @@ sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl enable dvsstart.service
 
-#sudo rm rpi_image.sh
-#echo
-#echo ">>> finished and deleted rpi_image.sh"
-#echo
-#echo ">>> Hit ENTER to reboot or ctrl-C to quit"
-#read
-#sudo reboot
+echo
+echo ">>> finished rpi_image.sh"
+echo
+
 exit 0
