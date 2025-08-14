@@ -114,40 +114,6 @@ if [[ ! -f "/boot/firmware/network.txt" ]]; then
 fi
 
 #=======================================================
-
-# shellinabox 설치
-echo
-echo ">>> install shellinabox and change stanzas"
-
-sudo apt-get update
-sudo apt-get install shellinabox
-
-FILE="/etc/default/shellinabox"
-
-# 1. SHELLINABOX_PORT 처리
-if grep -q "^SHELLINABOX_PORT" "$FILE"; then
-    sudo sed -i 's|^SHELLINABOX_PORT.*|SHELLINABOX_PORT=7388|' "$FILE"
-else
-    echo 'SHELLINABOX_PORT=7388' | sudo tee -a "$FILE" > /dev/null
-fi
-
-# 2. SHELLINABOX_ARGS 처리
-if grep -q "^SHELLINABOX_ARGS" "$FILE"; then
-    sudo sed -i 's|^SHELLINABOX_ARGS.*|SHELLINABOX_ARGS="--no-beep --disable-ssl "|' "$FILE"
-else
-    echo 'SHELLINABOX_ARGS="--no-beep --disable-ssl "' | sudo tee -a "$FILE" > /dev/null
-fi
-
-# 3. OPTS 처리
-if grep -q "^OPTS=" "$FILE"; then
-    sudo sed -i 's|^OPTS=.*|OPTS="--localhost-only"|' "$FILE"
-else
-    echo 'OPTS="--localhost-only"' | sudo tee -a "$FILE" > /dev/null
-fi
-
-echo "[✓] $FILE 수정 완료"
-
-#=======================================================
 # dvsstart.service, dvsstart-runner.sh 설치
 echo
 echo ">>> downloading files. dvsstart.service, dvsstart-runner.sh"
