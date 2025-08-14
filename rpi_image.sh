@@ -95,6 +95,7 @@ sudo apt install fonts-nanum fonts-unfonts-core fonts-noto-cjk
 #=======================================================
 
 # /boot/firmware 폴더에 파일 설치
+# 만약 Debian 12 미만의 시스템이면 폴더가 존재하지 않아서 에러가 날 수 있음
 echo
 echo ">>> downloading files. dvsconfig.txt, dvsSetup.exe, dvsNetwork.exe, network.txt"
 
