@@ -52,7 +52,7 @@ update_var desc "DVSwitch"
 update_var url https:\/\/www.qrz.com\/db\/${callsign}
 
 echo "[dvsstart] $(date +%T) excute init_config.sh return" >> "$LOG_FILE"
-sudo ${DVS}init_config.sh return > /dev/null 2>&1
+sudo ${DVS}config_main_user.sh return > /dev/null 2>&1
 # sudo ${DVS}config_main_user.sh return > /dev/null 2>&1
 
 # echo "[dvsstart] $(date +%T) temp_msg.sh -y" >> "$LOG_FILE"
