@@ -90,7 +90,7 @@ echo
 echo ">>> change font to Nanum, Noto CJK"
 
 sudo apt update
-sudo apt install fonts-nanum fonts-unfonts-core fonts-noto-cjk
+sudo apt install fonts-nanum fonts-unfonts-core fonts-noto-cjk y
 
 #=======================================================
 
