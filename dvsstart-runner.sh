@@ -67,7 +67,7 @@ while true; do
             echo "[_RUNNER_] $(date +%T) back to dvsstart-runner.sh and finish" >> "$LOG_FILE" 
             sed -i 's/^chg=.*/chg=73/' "$BOOT_FLAG"
             exit 0
-	else
+		else
             echo "[_RUNNER_] $(date +%T) dvsstart.sh failed → retrying in 10s" >> "$LOG_FILE"
         fi
     else
