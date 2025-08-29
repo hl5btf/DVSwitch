@@ -33,16 +33,15 @@ CHG="${chg:-0}"
 if [ "$CHG" != "1" ]; then
     echo "[_RUNNER_] $(date +%T) Skipping (dvsconfig.txt - chg=$CHG)" >> "$LOG_FILE"
     dvsstart_exit=yes
+else
+	echo "[_RUNNER_] $(date +%T) chg=1 detected..." >> "$LOG_FILE"
 fi
 
 CALLSIGN="${callsign:-HL1AAA}"
-if [ "$CALLSIGN" = "HL1AAA" ]; then
+if [[  "$CHG" = "1" && "$CALLSIGN" = "HL1AAA" ]]; then
     echo "[_RUNNER_] $(date +%T) Skipping (dvsconfig.txt - callsign=$CALLSIGN)" >> "$LOG_FILE"
     dvsstart_exit=yes
 fi
-
-echo "[_RUNNER_] $(date +%T) chg=1 detected → Starting dvsstart.sh with retry loop..." >> "$LOG_FILE"
-
 
 if [ "$dvsstart_exit" != "yes" ]; then
 # 인터넷 연결 확인 후 dvsstart.sh 설치 및 실행
@@ -68,7 +67,7 @@ while true; do
         if "$DVS_SCRIPT"; then
             echo "[_RUNNER_] $(date +%T) back to dvsstart-runner.sh and finish" >> "$LOG_FILE" 
             sed -i 's/^chg=.*/chg=73/' "$BOOT_FLAG"
-            exit 0
+            break
 	else
             echo "[_RUNNER_] $(date +%T) dvsstart.sh failed → retrying in 10s" >> "$LOG_FILE"
         fi
@@ -79,16 +78,44 @@ while true; do
 done
 fi
 
+
 # dvsmu_upgrade.sh
-# 아래의 내용은 이미지 제작후의 변경내용 반영하기 위한 초기 업그레이드임. 1회 실행후에는 지우게 됨 
-if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
-        file=dvsmu_upgrade.sh
-        sudo wget -O /tmp/$file https://raw.githubusercontent.com/hl5btf/DVSMU/main/$file > /dev/null 2>&1
-        sudo chmod +x /tmp/$file
-        sudo /tmp/$file call_from_dvsstart
-        sleep 1
-        sudo rm /tmp/$file
-fi
+# 아래의 내용은 이미지 제작후의 변경내용 반영하기 위한 초기 업그레이드임. 1회 실행후에는 지우게 됨
+
+UPGRADE_SCRIPT="/tmp/dvsmu_upgrade.sh"
+UPGRADE_URL="https://raw.githubusercontent.com/hl5btf/DVSMU/main/dvsmu_upgrade.sh"
+
+while true; do
+    if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
+        echo "[_RUNNER_] $(date +%T) Internet OK → download and running dvsmu_upgrade.sh" >> "$LOG_FILE"
+
+        # 1. 다운로드
+        if ! wget -q -O "$UPGRADE_SCRIPT" "$UPGRADE_URL"; then
+            echo "[_RUNNER_] $(date +%T) Failed to download dvsmu_upgrade.sh" >> "$LOG_FILE"
+            exit 1
+        fi
+        echo "[_RUNNER_] $(date +%T) Downloaded dvsmu_upgrade.sh" >> "$LOG_FILE"
+
+        # 2. 실행 권한
+        if ! chmod +x "$UPGRADE_SCRIPT"; then
+            echo "[_RUNNER_] $(date +%T) Failed to chmod dvsmu_upgrade.sh" >> "$LOG_FILE"
+            exit 1
+        fi
+        echo "[_RUNNER_] $(date +%T) Made dvsmu_upgrade.sh executable" >> "$LOG_FILE"
+
+        # 3. 실행
+        if "$UPGRADE_SCRIPT"; then
+            echo "[_RUNNER_] $(date +%T) dvsmu_upgrade.sh finished" >> "$LOG_FILE"
+            break
+        else
+            echo "[_RUNNER_] $(date +%T) dvsmu_upgrade.sh failed → retrying in 10s" >> "$LOG_FILE"
+        fi
+    else
+        echo "[_RUNNER_] $(date +%T) Internet not ready → retrying in 10s" >> "$LOG_FILE"
+    fi
+    sleep 10
+done
+
 
 # ---[ 1회 실행 후 자기 자신 정리: 백업 없이, 마커 줄 포함 삭제 ]---
 SELF="${BASH_SOURCE[0]:-$0}"
@@ -118,4 +145,3 @@ else
   rm -f "$TMP"
 fi
 # --------------------------------------------------------------------
-
